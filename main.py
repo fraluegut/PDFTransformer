@@ -7,7 +7,7 @@ number_of_pages = read_pdf.getNumPages()
 print(number_of_pages)"""
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
-
+import numpy as np
 
 def extract_information(pdf_path):
     with open(pdf_path, 'rb') as f:
@@ -34,11 +34,12 @@ numero_pg = PdfFileReader(open('sample.pdf', 'rb')).getNumPages()
 
 print("Número de páginas del pdf: ")
 print(numero_pg)
+###################################################################
+numero_pg = 8
 
-numero_pg = 9
 def numero_carillas(numero_pg):
     if numero_pg % 2 == 0:
-        numero_carillas = numero_pg /2
+        numero_carillas = int(numero_pg /2)
         print("Es par")
     else:
         numero_carillas = int(numero_pg /2) +1
@@ -47,13 +48,55 @@ def numero_carillas(numero_pg):
 
 def numero_folios(numero_carillas):
     if numero_carillas % 2 == 0:
-        numero_folios = numero_carillas / 2
+        numero_folios = int(numero_carillas / 2)
     else:
         numero_folios = int(numero_carillas / 2) + 1
-
+    return numero_folios
 
 print("Número de carillas: ")
 print(numero_carillas(numero_pg))
+
+print("Número de folios: ")
+print(numero_folios(numero_carillas(numero_pg)))
+
+
+matriz = np.arange(1,((numero_folios(numero_carillas(numero_pg))* 4)+1)).reshape((numero_folios(numero_carillas(numero_pg)), 4))
+print(matriz)
+
+# Reemplazamiento de páginas:
+def pagina_central(numero_pg):
+    if numero_pg % 2 == 0:
+        pagina_central = int(numero_pg / 2)
+    else:
+        pagina_central = int(numero_pg / 2) + 1
+    return pagina_central
+
+print("Página central: ")
+pagina_centro = pagina_central(numero_pg)
+print("Página centro")
+print(pagina_centro)
+n_positivo = int(numero_pg / 2)
+n_negativo = -int(numero_pg / 2)
+print("N_negativo")
+print(n_negativo)
+print("N_positivo")
+print(n_positivo)
+n = pagina_centro
+numero_mayor = numero_folios(numero_carillas(numero_pg)) * 4
+print("Número mayor: ")
+print(numero_mayor)
+for x in range(n+1):
+
+    print(n+1)
+    print(x)
+    np.place(matriz, matriz == (numero_mayor-x+1), numero_mayor-x)
+    #np.place(matriz, matriz == (numero_mayor+x), n-x)
+#np.place(matriz, matriz==((numero_folios(numero_carillas(numero_pg))* 4)), pagina_centro+1)
+print(matriz)
+
+
+
+
 
 def split(path, name_of_split):
     pdf = PdfFileReader(path)
@@ -66,9 +109,6 @@ def split(path, name_of_split):
             pdf_writer.write(output_pdf)
 
 
-
-print("Prueba: ")
-print(33 % 2)
 
 
 

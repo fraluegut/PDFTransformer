@@ -29,6 +29,31 @@ def extract_information(pdf_path):
     print(txt)
     return information
 
+
+numero_pg = PdfFileReader(open('sample.pdf', 'rb')).getNumPages()
+
+print("Número de páginas del pdf: ")
+print(numero_pg)
+
+numero_pg = 9
+def numero_carillas(numero_pg):
+    if numero_pg % 2 == 0:
+        numero_carillas = numero_pg /2
+        print("Es par")
+    else:
+        numero_carillas = int(numero_pg /2) +1
+        print("No es par")
+    return numero_carillas
+
+def numero_folios(numero_carillas):
+    if numero_carillas % 2 == 0:
+        numero_folios = numero_carillas / 2
+    else:
+        numero_folios = int(numero_carillas / 2) + 1
+
+print("Número de carillas: ")
+print(numero_carillas(numero_pg))
+
 def split(path, name_of_split):
     pdf = PdfFileReader(path)
     for page in range(pdf.getNumPages()):
@@ -39,7 +64,14 @@ def split(path, name_of_split):
         with open(output, 'wb') as output_pdf:
             pdf_writer.write(output_pdf)
 
+
+
+print("Prueba: ")
+print(33 % 2)
+
+
+
 if __name__ == '__main__':
     path = 'sample.pdf'
-    extract_information(path)
+    #extract_information(path)
     split(path, "Splitado")

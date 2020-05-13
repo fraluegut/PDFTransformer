@@ -35,7 +35,7 @@ numero_pg = PdfFileReader(open('sample.pdf', 'rb')).getNumPages()
 print("Número de páginas del pdf: ")
 print(numero_pg)
 ###################################################################
-numero_pg = 8
+numero_pg = 9
 
 def numero_carillas(numero_pg):
     if numero_pg % 2 == 0:
@@ -85,12 +85,52 @@ n = pagina_centro
 numero_mayor = numero_folios(numero_carillas(numero_pg)) * 4
 print("Número mayor: ")
 print(numero_mayor)
-for x in range(n+1):
+print(n)
+for posicion in range(numero_mayor):
+    print("Posición ")
+    print(posicion)
 
-    print(n+1)
+# Posición central
+print("Posición central: ")
+posicion_central = numero_mayor -2
+print(posicion_central)
+
+# Valor central
+valor_central = numero_mayor /2
+# Modificación del valor de la posición central:
+matriz.put(posicion_central, valor_central)
+
+matriz.put(posicion_central+1, valor_central+1)
+matriz.put(posicion_central-1, valor_central-1)
+
+horquilla = range(1,numero_mayor)
+"""for x in horquilla:
+    posicion_central = 0
+    valor_central = 0
+    posicion_central = posicion_central + x
+    valor_central = valor_central + x
+    print(posicion_central)
+    matriz.put(posicion_central, valor_central)
+    posicion_central = posicion_central - x
+    valor_central = valor_central - x
+    #matriz.put(posicion_central, valor_central)"""
+
+
+
+"""
+for x in range(1,n+1):
+    print("La x vale: ")
     print(x)
-    np.place(matriz, matriz == (numero_mayor-x+1), numero_mayor-x)
-    #np.place(matriz, matriz == (numero_mayor+x), n-x)
+    a = 1
+    b = numero_mayor
+    #print(int(a*x), int(b*x))
+    print(int(a+a*x), int(b-a*x))
+
+    #np.place(matriz, matriz == (numero_mayor-x+1), numero_mayor-x)
+    np.place(matriz, matriz == numero_mayor-1, n)
+    np.place(matriz, matriz == numero_mayor - 1+x, n+x)
+    np.place(matriz, matriz == numero_mayor - 1-x, n - x)
+"""
 #np.place(matriz, matriz==((numero_folios(numero_carillas(numero_pg))* 4)), pagina_centro+1)
 print(matriz)
 

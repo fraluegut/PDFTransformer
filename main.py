@@ -51,6 +51,7 @@ def numero_folios(numero_carillas):
     else:
         numero_folios = int(numero_carillas / 2) + 1
 
+
 print("Número de carillas: ")
 print(numero_carillas(numero_pg))
 

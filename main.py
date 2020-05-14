@@ -8,6 +8,7 @@ print(number_of_pages)"""
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import numpy as np
+import glob
 
 def extract_information(pdf_path):
     with open(pdf_path, 'rb') as f:
@@ -30,12 +31,12 @@ def extract_information(pdf_path):
     return information
 
 
-numero_pg = PdfFileReader(open('sample.pdf', 'rb')).getNumPages()
+numero_pg = PdfFileReader(open('Desobediencia_civil.pdf', 'rb')).getNumPages()
 
 print("Número de páginas del pdf: ")
 print(numero_pg)
 ###################################################################
-numero_pg = 9
+numero_pg = 16
 
 def numero_carillas(numero_pg):
     if numero_pg % 2 == 0:
@@ -64,14 +65,14 @@ matriz = np.arange(1,((numero_folios(numero_carillas(numero_pg))* 4)+1)).reshape
 print(matriz)
 
 # Reemplazamiento de páginas:
-def pagina_central(numero_pg):
+"""def pagina_central(numero_pg):
     if numero_pg % 2 == 0:
         pagina_central = int(numero_pg / 2)
     else:
         pagina_central = int(numero_pg / 2) + 1
     return pagina_central
-
-print("Página central: ")
+"""
+"""print("Página central: ")
 pagina_centro = pagina_central(numero_pg)
 print("Página centro")
 print(pagina_centro)
@@ -86,9 +87,7 @@ numero_mayor = numero_folios(numero_carillas(numero_pg)) * 4
 print("Número mayor: ")
 print(numero_mayor)
 print(n)
-for posicion in range(numero_mayor):
-    print("Posición ")
-    print(posicion)
+
 
 # Posición central
 print("Posición central: ")
@@ -98,12 +97,11 @@ print(posicion_central)
 # Valor central
 valor_central = numero_mayor /2
 # Modificación del valor de la posición central:
-matriz.put(posicion_central, valor_central)
+"""
 
-matriz.put(posicion_central+1, valor_central+1)
-matriz.put(posicion_central-1, valor_central-1)
 
-horquilla = range(1,numero_mayor)
+
+
 """for x in horquilla:
     posicion_central = 0
     valor_central = 0
@@ -131,11 +129,23 @@ for x in range(1,n+1):
     np.place(matriz, matriz == numero_mayor - 1+x, n+x)
     np.place(matriz, matriz == numero_mayor - 1-x, n - x)
 """
-#np.place(matriz, matriz==((numero_folios(numero_carillas(numero_pg))* 4)), pagina_centro+1)
+
+print("Nuevo Esquema: ")
 print(matriz)
 
+numero_mayor = 16
+numero_menor = 1
 
+def ascension(numero_mayor, numero_menor):
+    posicion_inicio = 2
+    posicion_final = 1
+    np.place(matriz, matriz == posicion_final, numero_mayor)
+    np.place(matriz, matriz == posicion_inicio, numero_menor)
+    for x in matriz:
+        np.place(matriz, matriz == posicion_inicio+x, numero_menor)
 
+ascension(numero_mayor, numero_menor)
+print(matriz)
 
 
 def split(path, name_of_split):
@@ -149,10 +159,21 @@ def split(path, name_of_split):
             pdf_writer.write(output_pdf)
 
 
-
+def merger(output_path, input_paths):
+    pdf_writer = PdfFileWriter()
+    for path in input_paths:
+        pdf_reader = PdfFileReader(path)
+        for page in range(pdf_reader.getNumPages()):
+            pdf_writer.addPage(pdf_reader.getPage(page))
+    with open(output_path, 'wb') as fh:
+        pdf_writer.write(fh)
 
 
 if __name__ == '__main__':
-    path = 'sample.pdf'
+    path = 'Desobediencia_civil.pdf'
     #extract_information(path)
-    split(path, "Splitado")
+    #split(path, "Desobediencia_civil_")
+
+    #paths = glob.glob('w9_*.pdf')
+    #paths.sort()
+    #merger('pdf_merger.pdf', paths)

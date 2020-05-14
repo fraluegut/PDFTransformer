@@ -172,6 +172,7 @@ def merger(output_path, input_paths):
 if __name__ == '__main__':
     path = 'Desobediencia_civil.pdf'
     #extract_information(path)
+
     #split(path, "Desobediencia_civil_")
 
     #paths = glob.glob('w9_*.pdf')

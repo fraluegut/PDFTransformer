@@ -136,18 +136,35 @@ print(matriz)
 numero_mayor = 16
 numero_menor = 1
 
+lista = (1,3,1,3,1,3)
 def ascension(numero_mayor, numero_menor):
     posicion_inicio = 2
     posicion_final = 1
     np.place(matriz, matriz == posicion_final, numero_mayor)
     np.place(matriz, matriz == posicion_inicio, numero_menor)
-    for x in matriz:
-        np.place(matriz, matriz == posicion_inicio+x, numero_menor)
+    for x in lista:
+        for i in range(numero_mayor):
+            np.place(matriz, matriz == posicion_inicio+i, numero_menor+1)
+            print(i)
+            posicion_inicio = posicion_inicio + x
+        return posicion_inicio
 
+#posicion_inicio+lista[x]
 ascension(numero_mayor, numero_menor)
 print(matriz)
 
+print("CODIFICACIÓN")
+codificacion = []
 
+for i in range(int(int(numero_mayor)/2)):
+    codificacion.append(1)
+    codificacion.append(3)
+
+print(codificacion)
+
+
+for x in range(numero_mayor):
+    matriz
 def split(path, name_of_split):
     pdf = PdfFileReader(path)
     for page in range(pdf.getNumPages()):

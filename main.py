@@ -165,6 +165,8 @@ print(codificacion)
 
 for x in range(numero_mayor):
     matriz
+
+# DIVIDIR PDF
 def split(path, name_of_split):
     pdf = PdfFileReader(path)
     for page in range(pdf.getNumPages()):
@@ -175,7 +177,7 @@ def split(path, name_of_split):
         with open(output, 'wb') as output_pdf:
             pdf_writer.write(output_pdf)
 
-
+# UNIR PDF
 def merger(output_path, input_paths):
     pdf_writer = PdfFileWriter()
     for path in input_paths:

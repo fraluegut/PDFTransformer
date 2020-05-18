@@ -31,11 +31,53 @@ def extract_information(pdf_path):
     return information
 
 
-numero_pg = PdfFileReader(open('Desobediencia_civil.pdf', 'rb')).getNumPages()
-
+#numero_pg = PdfFileReader(open('Desobediencia_civil.pdf', 'rb')).getNumPages()
+numero_pg = 12
 print("Número de páginas del pdf: ")
 print(numero_pg)
+
+# Nº folios:
+print("Número de folios: ")
+print(numero_pg/4)
 ###################################################################
+num2 = 4
+def mcd(num1, num2):
+    a = max(num1, num2)
+    b = min(num1, num2)
+    while b!=0:
+        mcd = b
+        b = a%b
+        a = mcd
+    return mcd
+
+def mcm(num1, num2):
+    a = max(num1, num2)
+    b = min(num1, num2)
+    mcm = (a / mcd(a,b)) * b
+    return mcm
+
+min_comun_multiplo_del_n_pg = mcm(numero_pg, 4)
+print(min_comun_multiplo_del_n_pg)
+###################################################################
+# Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
+matrix = np.arange(int(min_comun_multiplo_del_n_pg)).reshape((int(min_comun_multiplo_del_n_pg/4),4))
+print(matrix)
+
+matrix[0,0] = int(numero_pg)
+matrix[0,1] = 1
+matrix[0,2] = 2
+matrix[0,3] = numero_pg - 1
+print("Nueva tabla")
+
+for i in range(1, int(numero_pg/4)):
+    matrix[i, 0] = matrix[i-1, 0] - 2
+    matrix[i, 1] = matrix[i-1, 1] + 2
+    matrix[i, 2] = matrix[i-1, 2] + 2
+    matrix[i, 3] = matrix[i-1, 3] - 2
+
+print(matrix[2-1, 0])
+print(matrix)
+"""
 numero_pg = 16
 
 def numero_carillas(numero_pg):
@@ -63,7 +105,7 @@ print(numero_folios(numero_carillas(numero_pg)))
 
 matriz = np.arange(1,((numero_folios(numero_carillas(numero_pg))* 4)+1)).reshape((numero_folios(numero_carillas(numero_pg)), 4))
 print(matriz)
-
+"""
 # Reemplazamiento de páginas:
 """def pagina_central(numero_pg):
     if numero_pg % 2 == 0:
@@ -98,10 +140,6 @@ print(posicion_central)
 valor_central = numero_mayor /2
 # Modificación del valor de la posición central:
 """
-
-
-
-
 """for x in horquilla:
     posicion_central = 0
     valor_central = 0
@@ -112,9 +150,6 @@ valor_central = numero_mayor /2
     posicion_central = posicion_central - x
     valor_central = valor_central - x
     #matriz.put(posicion_central, valor_central)"""
-
-
-
 """
 for x in range(1,n+1):
     print("La x vale: ")
@@ -129,7 +164,7 @@ for x in range(1,n+1):
     np.place(matriz, matriz == numero_mayor - 1+x, n+x)
     np.place(matriz, matriz == numero_mayor - 1-x, n - x)
 """
-
+"""
 print("Nuevo Esquema: ")
 print(matriz)
 
@@ -186,6 +221,17 @@ def merger(output_path, input_paths):
             pdf_writer.addPage(pdf_reader.getPage(page))
     with open(output_path, 'wb') as fh:
         pdf_writer.write(fh)
+"""
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

@@ -32,12 +32,12 @@ def extract_information(pdf_path):
 
 
 #numero_pg = PdfFileReader(open('Desobediencia_civil.pdf', 'rb')).getNumPages()
-numero_pg = 12
+numero_pg = 48
 print("Número de páginas del pdf: ")
 print(numero_pg)
 
 # Nº folios:
-print("Número de folios: ")
+print("Número de folios teórico: ")
 print(numero_pg/4)
 ###################################################################
 num2 = 4
@@ -56,14 +56,23 @@ def mcm(num1, num2):
     mcm = (a / mcd(a,b)) * b
     return mcm
 
-min_comun_multiplo_del_n_pg = mcm(numero_pg, 4)
-print(min_comun_multiplo_del_n_pg)
+
+###################################################################
+# Redondeo forzado hacia arriba
+import math
+#math.ceil(1.1)
+
+# Número de folios reales:
+numero_folios_reales = math.ceil(numero_pg/4)
+print("Número de folios reales:")
+print(numero_folios_reales)
+mcm_num_pg = mcm(numero_pg,numero_folios_reales)
 ###################################################################
 # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
-matrix = np.arange(int(min_comun_multiplo_del_n_pg)).reshape((int(min_comun_multiplo_del_n_pg/4),4))
+matrix = np.arange(numero_folios_reales*4).reshape((numero_folios_reales,4))
 print(matrix)
 
-matrix[0,0] = int(numero_pg)
+"""matrix[0,0] = int(numero_pg)
 matrix[0,1] = 1
 matrix[0,2] = 2
 matrix[0,3] = numero_pg - 1
@@ -75,8 +84,27 @@ for i in range(1, int(numero_pg/4)):
     matrix[i, 2] = matrix[i-1, 2] + 2
     matrix[i, 3] = matrix[i-1, 3] - 2
 
-print(matrix[2-1, 0])
+"""
+
+
+
+matrix[numero_folios_reales-1,2] = (numero_folios_reales*4)/2
+matrix[numero_folios_reales-1,1] = matrix[numero_folios_reales-1,2] -1
+matrix[numero_folios_reales-1,3] = matrix[numero_folios_reales-1,2] +1
+matrix[numero_folios_reales-1,0] = matrix[numero_folios_reales-1,3] +1
+print("Nueva tabla")
+
+for i in range(int(numero_folios_reales)-2, -1, -1):
+    print(i)
+    matrix[i, 0] = matrix[i+1, 0] + 2
+    matrix[i, 1] = matrix[i+1, 1] - 2
+    matrix[i, 2] = matrix[i+1, 2] - 2
+    matrix[i, 3] = matrix[i+1, 3] + 2
+
+#print(matrix[2-1, 0])
 print(matrix)
+
+
 """
 numero_pg = 16
 

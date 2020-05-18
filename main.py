@@ -78,13 +78,12 @@ print(matrix)
 #######################################################################
 #Merge pdf
 
-pdf_page = "jose"
-print("Desobediencia_civil_%s.pdf" % pdf_page)
+
 lista_pdfs_cara_A = []
 
 for i in range(0, numero_folios_reales):
-        lista_pdfs_cara_A.append("Desobediencia_civil_%s.pdf" % matrix[i,0])
-        lista_pdfs_cara_A.append("Desobediencia_civil_%s.pdf" % matrix[i, 1])
+        lista_pdfs_cara_A.append("Desobediencia_civil_%s.pdf" % (matrix[i,0]-1))
+        lista_pdfs_cara_A.append("Desobediencia_civil_%s.pdf" % (matrix[i, 1]-1))
 
 print(lista_pdfs_cara_A)
 #pdfs = ["Desobediencia_civil_%s.pdf" % name]
@@ -105,4 +104,4 @@ if __name__ == '__main__':
 
     paths = glob.glob('w9_*.pdf')
     paths.sort()
-    merger('pdf_merger.pdf', paths)
+    #merger('pdf_merger.pdf', paths)

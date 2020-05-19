@@ -28,7 +28,7 @@ def extract_information(pdf_path):
     """
 
     print(txt)
-    return information
+    return information, number_of_pages
 
 
 numero_pg = PdfFileReader(open('Desobediencia_civil.pdf', 'rb')).getNumPages()

@@ -37,9 +37,9 @@ def input():
     numero_folios_result.configure(text='Número de folios: ' + str(math.ceil(numero_pg/4)))
 
 def output():
-    path = tk.filedialog.askopenfilename()
-    input_entry.delete(1, tk.END)  # Remove current text in entry
-    input_entry.insert(0, path)  # Insert the 'path'
+    path = filedialog.askdirectory()
+    output_entry.delete(1, tk.END)  # Remove current text in entry
+    output_entry.insert(0, str(path))  # Insert the 'path'
 
 def print_selection():
     l.config(text='Ha seleccionado  ' + var.get())

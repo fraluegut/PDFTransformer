@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog, Entry
-from main import extract_information
+
 import tkinter as tk
 window = Tk()
 from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
@@ -18,7 +18,7 @@ def clicked():
         numero_pg = pdf.getNumPages()
     numero_paginas_result.configure(text=numero_pg)
     numero_folios_result.configure(text=str(math.ceil(numero_pg/4)))
-    print(window.filename)
+
 
     return window.filename, numero_pg
 
@@ -46,7 +46,7 @@ numero_folios_result.grid(column=1, row=6)
 
 if window.filename is not None:
     a = window.filename
-    print(a)
+
 
 
 window.geometry('350x200')

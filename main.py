@@ -33,12 +33,12 @@ def extract_information(pdf_path):
 
 numero_pg = PdfFileReader(open('Desobediencia_civil.pdf', 'rb')).getNumPages()
 #numero_pg = 40
-print("Número de páginas del pdf: ")
-print(numero_pg)
+#print("Número de páginas del pdf: ")
+#print(numero_pg)
 
 # Nº folios:
-print("Número de folios teórico: ")
-print(numero_pg/4)
+#print("Número de folios teórico: ")
+#print(numero_pg/4)
 ###################################################################
 
 # Redondeo forzado hacia arriba
@@ -47,16 +47,16 @@ import math
 
 # Número de folios reales:
 numero_folios_reales = math.ceil(numero_pg/4)
-print("Número de folios reales:")
-print(numero_folios_reales)
+#print("Número de folios reales:")
+#print(numero_folios_reales)
 
 ###################################################################
 # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
 matrix = np.arange(numero_folios_reales*4).reshape((numero_folios_reales,4))
 
 # Matriz base:
-print("Matriz base:")
-print(matrix)
+#print("Matriz base:")
+#print(matrix)
 
 
 matrix[numero_folios_reales-1,2] = (numero_folios_reales*4)/2
@@ -72,8 +72,8 @@ for i in range(int(numero_folios_reales)-2, -1, -1):
     matrix[i, 2] = matrix[i+1, 2] - 2
     matrix[i, 3] = matrix[i+1, 3] + 2
 
-print("Matriz definitiva")
-print(matrix)
+#print("Matriz definitiva")
+#print(matrix)
 
 #######################################################################
 #Merge pdf
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     path = 'Desobediencia_civil.pdf'
     extract_information(path)
 
-    #split(path, "Desobediencia_civil_")
+    split(path, "Desobediencia_civil_")
 
     paths = glob.glob('w9_*.pdf')
     paths.sort()

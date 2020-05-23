@@ -3,16 +3,17 @@ from tkinter import messagebox
 from tkinter import filedialog, Entry, Checkbutton, Radiobutton
 import tkinter.filedialog as filedialog
 import tkinter as tk
-
 from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
 import math
+import numpy as np
 
 # Creación de la ventana
 window = Tk()
 window.title("PDF to A5 Printable Book") # Nombre de la ventana
 
 window.filename = None
-
+titulo = "prueba"
+path = '/home/fraluegut/Descargas/'
 # Funciones
 def clicked():
     window.filename = filedialog.askopenfilename(initialdir="/home/fraluegut/Descargas", title="Select file", filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
@@ -27,6 +28,7 @@ def clicked():
     return window.filename, numero_pg
 
 def input():
+    global numero_folios_reales
     input_path = tk.filedialog.askopenfilename()
     input_entry.delete(1, tk.END)  # Remove current text in entry
     input_entry.insert(0, input_path)  # Insert the 'path'
@@ -35,16 +37,62 @@ def input():
         numero_pg = pdf.getNumPages()
     numero_paginas_result.configure(text='Número de páginas: ' + str(numero_pg))
     numero_folios_result.configure(text='Número de folios: ' + str(math.ceil(numero_pg/4)))
+    numero_folios_reales = math.ceil(numero_pg / 4)
+    return numero_folios_reales
 
 def output():
+
     path = filedialog.askdirectory()
     output_entry.delete(1, tk.END)  # Remove current text in entry
     output_entry.insert(0, str(path))  # Insert the 'path'
+    return path
+
+def split(path, name_of_split):
+    pdf = PdfFileReader(path)
+    for page in range(pdf.getNumPages()):
+        pdf_writer = PdfFileWriter()
+        pdf_writer.addPage(pdf.getPage(page))
+
+        output = f'{name_of_split}{page}.pdf'
+        with open(output, 'wb') as output_pdf:
+            pdf_writer.write(output_pdf)
 
 def print_selection():
     l.config(text='Ha seleccionado  ' + var.get())
+
 def procesar():
-    None
+
+    split(path, titulo)
+
+    # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
+    matrix = np.arange(numero_folios_reales * 4).reshape((numero_folios_reales, 4))
+
+    matrix[numero_folios_reales - 1, 2] = (numero_folios_reales * 4) / 2
+    matrix[numero_folios_reales - 1, 1] = matrix[numero_folios_reales - 1, 2] - 1
+    matrix[numero_folios_reales - 1, 3] = matrix[numero_folios_reales - 1, 2] + 1
+    matrix[numero_folios_reales - 1, 0] = matrix[numero_folios_reales - 1, 3] + 1
+
+    for i in range(int(numero_folios_reales) - 2, -1, -1):
+        # print(i)
+        matrix[i, 0] = matrix[i + 1, 0] + 2
+        matrix[i, 1] = matrix[i + 1, 1] - 2
+        matrix[i, 2] = matrix[i + 1, 2] - 2
+        matrix[i, 3] = matrix[i + 1, 3] + 2
+
+    Pdfs_cara_A = []
+
+    for i in range(0, numero_folios_reales):
+        Pdfs_cara_A.append("%s_%s.pdf" % (titulo, (matrix[i, 0] - 1)))
+        Pdfs_cara_A.append("%s_%s.pdf" % (titulo, (matrix[i, 1] - 1)))
+
+    merger = PdfFileMerger()
+
+    for pdf in Pdfs_cara_A:
+        merger.append(pdf)
+
+    merger.write("titulo")
+    merger.close()
+
 # Display
 """
 btn = Button(window, text="Seleccionar documento", command=clicked) # Botón de selección de archivo

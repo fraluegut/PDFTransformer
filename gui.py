@@ -20,8 +20,8 @@ def clicked():
     with open(window.filename, 'rb') as f:
         pdf = PdfFileReader(f)
         numero_pg = pdf.getNumPages()
-    numero_paginas_result.configure(text=numero_pg)
-    numero_folios_result.configure(text=str(math.ceil(numero_pg/4)))
+    numero_paginas_result.configure(text='Número de páginas: ' + str(numero_pg))
+    numero_folios_result.configure(text='Número de folios: ' + str(math.ceil(numero_pg/4)))
 
 
     return window.filename, numero_pg
@@ -30,6 +30,11 @@ def input():
     input_path = tk.filedialog.askopenfilename()
     input_entry.delete(1, tk.END)  # Remove current text in entry
     input_entry.insert(0, input_path)  # Insert the 'path'
+    with open(input_path, 'rb') as f:
+        pdf = PdfFileReader(f)
+        numero_pg = pdf.getNumPages()
+    numero_paginas_result.configure(text='Número de páginas: ' + str(numero_pg))
+    numero_folios_result.configure(text='Número de folios: ' + str(math.ceil(numero_pg/4)))
 
 def output():
     path = tk.filedialog.askopenfilename()
@@ -94,6 +99,14 @@ l.pack(pady=5)
 browse3 = tk.Button(frame_base, text="Procesar", command=procesar)
 browse3.pack(pady=5)
 
+resumen = tk.Label(frame_base, bg='white', width=200, text='Resumen')
+resumen.pack(pady=5)
+
+numero_paginas_result = tk.Label(frame_base, bg='white', width=200, text='Número de páginas: ')
+numero_paginas_result.pack(pady=5)
+
+numero_folios_result = tk.Label(frame_base, bg='white', width=200, text='Número de folios: ')
+numero_folios_result.pack(pady=5)
 
 
 if window.filename is not None:
@@ -101,7 +114,7 @@ if window.filename is not None:
 
 
 
-window.geometry('700x400')
+window.geometry('700x500')
 window.mainloop()
 
 """

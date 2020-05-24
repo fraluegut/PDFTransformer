@@ -6,6 +6,7 @@ import tkinter as tk
 from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
 import math
 import numpy as np
+import webbrowser as wb
 
 # Creación de la ventana
 window = Tk()
@@ -89,10 +90,12 @@ def procesar():
 
     for pdf in Pdfs_cara_A:
         merger.append(pdf)
-
-    merger.write("titulo2")
+    # Juntamos muy junticos los pdfs resultantes y le damos el nombre que indicó el usuario en nombre_salida_entry a través de un get().
+    merger.write(nombre_salida_entry.get())
     merger.close()
-
+    url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get()
+    # Abre el documento resultante
+    wb.open_new(url_salida)
 
 ##################### Display ######################################
 
@@ -124,15 +127,22 @@ output_entry.pack(pady=5)
 browse2 = tk.Button(frame_base, text="Seleccionar ubicación de salida", command=output)
 browse2.pack(pady=5)
 
-# RadioButton Impresora doble cara/Impresora una cara
+# Texto "Nombre salida":
+nombre_salida = tk.Label(frame_base, text="Nombre salida:")
+nombre_salida.pack(pady=5)
 
+# Hueco para introducir nombre_salida:
+nombre_salida_entry = tk.Entry(frame_base, text="", width=40)
+nombre_salida_entry.pack(pady=5)
+
+# RadioButton Impresora doble cara/Impresora una cara
 var = tk.StringVar()
 r1 = tk.Radiobutton(frame_base, text='Impresora doble cara', variable=var, value='impresora doble cara', command=print_selection)
 r1.pack()
 r2 = tk.Radiobutton(frame_base, text='Impresora una cara', variable=var, value='impresora una cara', command=print_selection)
 r2.pack()
 
-
+# Hueco para la impresora elegida
 l = tk.Label(frame_base, bg='white', width=200, text='')
 l.pack(pady=5)
 

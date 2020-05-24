@@ -13,7 +13,7 @@ window.title("PDF to A5 Printable Book") # Nombre de la ventana
 
 window.filename = None
 titulo = "prueba"
-path = '/home/fraluegut/Descargas/'
+
 # Funciones
 def clicked():
     window.filename = filedialog.askopenfilename(initialdir="/home/fraluegut/Descargas", title="Select file", filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
@@ -62,7 +62,7 @@ def print_selection():
 
 def procesar():
 
-    split(path, titulo)
+    split("Cara_A.pdf", 'prueba_')
 
     # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
     matrix = np.arange(numero_folios_reales * 4).reshape((numero_folios_reales, 4))
@@ -90,69 +90,65 @@ def procesar():
     for pdf in Pdfs_cara_A:
         merger.append(pdf)
 
-    merger.write("titulo")
+    merger.write("titulo2")
     merger.close()
 
-# Display
-"""
-btn = Button(window, text="Seleccionar documento", command=clicked) # Botón de selección de archivo
-btn.grid(column=1, row=0)
 
-nombre_salida = tk.Entry(window) # Nombre de salida
-nombre_salida.grid(column=1, row=1)
-#nombre_salida.place(relx=0.0, rely=0.0, anchor=NW)
+##################### Display ######################################
 
-ubicacion_salida = Button(window, text="Ubicación de salida", command=clicked) # Botón de Ubicación de salida
-ubicacion_salida.grid(column=1, row=2)
-
-numero_paginas = Label(window, text="Número de páginas del archivo: ") # Número de páginas del archivo
-numero_paginas.grid(column=1, row=3)
-numero_paginas_result = Label(window, text="")
-numero_paginas_result.grid(column=1, row=4)
-
-numero_folios = Label(window, text="Número de folios necesarios: ") # Número de folios necesarios
-numero_folios.grid(column=1, row=5)
-numero_folios_result = Label(window, text="")
-numero_folios_result.grid(column=1, row=6)
-"""
-
+# Frame
 frame_base = tk.Frame(window)
-input_path = tk.Label(frame_base, text="Ubicación del archivo original:")
-input_entry = tk.Entry(frame_base, text="", width=40)
-browse1 = tk.Button(frame_base, text="Seleccionar ubicación", command=input)
-output_path = tk.Label(frame_base, text="Ubicación del archivo de salida:")
-output_entry = tk.Entry(frame_base, text="", width=40)
-browse2 = tk.Button(frame_base, text="Seleccionar ubicación de salida", command=output)
-
 frame_base.pack(side=tk.TOP)
 
+# Texto Ubicación del archivo original:
+input_path = tk.Label(frame_base, text="Ubicación del archivo original:")
 input_path.pack(pady=5)
+
+# Hueco para ruta del archivo original:
+input_entry = tk.Entry(frame_base, text="", width=40)
 input_entry.pack(pady=5)
+
+# Botón Seleccionar ubicación:
+browse1 = tk.Button(frame_base, text="Seleccionar ubicación", command=input)
 browse1.pack(pady=5)
 
+# Texto Ubicación de la carpeta de salida:
+output_path = tk.Label(frame_base, text="Ubicación de la carpeta de salida:")
 output_path.pack(pady=5)
+
+# Hueco para ruta de la ubicación de salida:
+output_entry = tk.Entry(frame_base, text="", width=40)
 output_entry.pack(pady=5)
+
+# Botón Seleccionar ubicación de salida
+browse2 = tk.Button(frame_base, text="Seleccionar ubicación de salida", command=output)
 browse2.pack(pady=5)
+
+# RadioButton Impresora doble cara/Impresora una cara
 
 var = tk.StringVar()
 r1 = tk.Radiobutton(frame_base, text='Impresora doble cara', variable=var, value='impresora doble cara', command=print_selection)
 r1.pack()
-
 r2 = tk.Radiobutton(frame_base, text='Impresora una cara', variable=var, value='impresora una cara', command=print_selection)
 r2.pack()
+
 
 l = tk.Label(frame_base, bg='white', width=200, text='')
 l.pack(pady=5)
 
+# Botón Procesar
 browse3 = tk.Button(frame_base, text="Procesar", command=procesar)
 browse3.pack(pady=5)
 
+# Texto Resumen
 resumen = tk.Label(frame_base, bg='white', width=200, text='Resumen')
 resumen.pack(pady=5)
 
+# Texto Número de páginas:
 numero_paginas_result = tk.Label(frame_base, bg='white', width=200, text='Número de páginas: ')
 numero_paginas_result.pack(pady=5)
 
+# Texto Número de folios:
 numero_folios_result = tk.Label(frame_base, bg='white', width=200, text='Número de folios: ')
 numero_folios_result.pack(pady=5)
 
@@ -161,7 +157,7 @@ if window.filename is not None:
     a = window.filename
 
 
-
+# Dimensiones de la ventana
 window.geometry('700x500')
 window.mainloop()
 

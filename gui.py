@@ -118,9 +118,15 @@ def procesar():
     merger = PdfFileMerger()
 
     for pdf in Pdfs_cara_A:
-        merger.append(pdf)
+        try:
+            merger.append(pdf)
+        except FileNotFoundError:
+            merger.append("pdf_blanco.pdf")
     for pdf in Pdfs_cara_B:
-        merger.append(pdf)
+        try:
+            merger.append(pdf)
+        except FileNotFoundError:
+            merger.append("pdf_blanco.pdf")
     # Juntamos muy junticos los pdfs resultantes y le damos el nombre que indicó el usuario en nombre_salida_entry a través de un get().
     merger.write(nombre_salida_entry.get())
     merger.close()

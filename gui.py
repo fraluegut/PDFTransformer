@@ -64,8 +64,11 @@ def split(path, name_of_split):
 def print_selection():
     l.config(text='Ha seleccionado  ' + var.get())
 
+
+
 def procesar():
     print(input_path)
+
     split(str(input_path), str(nombre_salida_entry.get())+"_")
 
     # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
@@ -86,14 +89,31 @@ def procesar():
     Pdfs_cara_A = []
 
     for i in range(0, numero_folios_reales):
-        Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1)))
-        Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1)))
+
+        if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1))) != None:
+            Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1)))
+        else:
+            Pdfs_cara_A.append("pdf_blanco.pdf")
+
+        if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1))) != None:
+            Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1)))
+        else:
+            Pdfs_cara_A.append("pdf_blanco.pdf")
 
     Pdfs_cara_B = []
 
     for i in range(0, numero_folios_reales):
-        Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1)))
-        Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1)))
+
+        if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1))) != None:
+            Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1)))
+        else:
+            Pdfs_cara_B.append("pdf_blanco.pdf")
+
+        if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1))) != None:
+            Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1)))
+        else:
+            Pdfs_cara_B.append("pdf_blanco.pdf")
+
 
     merger = PdfFileMerger()
 

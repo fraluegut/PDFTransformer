@@ -7,6 +7,7 @@ from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
 import math
 import numpy as np
 import webbrowser as wb
+from os import remove
 
 # Creación de la ventana
 window = Tk()
@@ -45,7 +46,7 @@ def input():
     return numero_folios_reales, input_path
 
 def output():
-
+    global path
     path = filedialog.askdirectory()
     output_entry.delete(1, tk.END)  # Remove current text in entry
     output_entry.insert(0, str(path))  # Insert the 'path'
@@ -133,7 +134,16 @@ def procesar():
     url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get()
     # Abre el documento resultante
     wb.open_new(url_salida)
-
+    for pdf in Pdfs_cara_A:
+        try:
+            remove("%s/%s" % (path, pdf))
+        except:
+            continue
+    for pdf in Pdfs_cara_B:
+        try:
+            remove("%s/%s" % (path, pdf))
+        except:
+            continue
 ##################### Display ######################################
 
 # Frame

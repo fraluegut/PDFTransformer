@@ -1,3 +1,4 @@
+import webbrowser
 from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog, Entry, Checkbutton, Radiobutton
@@ -8,7 +9,7 @@ import math
 import numpy as np
 import webbrowser as wb
 from os import remove
-
+import os
 # Creación de la ventana
 window = Tk()
 window.title("PDF to A5 Printable Book") # Nombre de la ventana
@@ -144,7 +145,13 @@ def procesar():
             remove("%s/%s" % (path, pdf))
         except:
             continue
+    #os.system(f'start {os.path.realpath(url_salida)}')
+    directorio = path.replace("/", "//")
+    print(directorio)
+    webbrowser.open(directorio)
 ##################### Display ######################################
+
+
 
 # Frame
 frame_base = tk.Frame(window)

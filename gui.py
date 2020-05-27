@@ -67,6 +67,14 @@ def print_selection():
     l.config(text='Ha seleccionado  ' + var.get())
 
 
+def establecer_n_libritos():
+    with open(input_path, 'rb') as f:
+        pdf = PdfFileReader(f)
+        numero_pg = pdf.getNumPages()
+    print(numero_pg)
+    numero_libritos = numero_pg/20
+    print(numero_libritos)
+
 
 def procesar():
     print(input_path)

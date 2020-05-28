@@ -68,14 +68,23 @@ def print_selection():
 
 
 def establecer_n_libritos():
-    with open(input_path, 'rb') as f:
-        pdf = PdfFileReader(f)
-        numero_pg = pdf.getNumPages()
+    #with open(input_path, 'rb') as f:
+        #pdf = PdfFileReader(f)
+        #numero_pg = pdf.getNumPages()
+    numero_pg = 100
     print(numero_pg)
-    numero_libritos = numero_pg/20
+    numero_libritos = int(numero_pg/20)
     print(numero_libritos)
+    pagina = 0
+    for i in range(1, numero_libritos+1):
+        libro = "librito_%s" %(i)
+        print(libro)
+        librito = range(pagina+1, pagina+20)
+        print(librito)
+        pagina= pagina + 20
 
 
+establecer_n_libritos()
 def procesar():
     print(input_path)
 

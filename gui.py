@@ -82,8 +82,9 @@ def establecer_n_libritos():
         librito = range(pagina+1, pagina+20)
         print(librito)
         pagina= pagina + 20
+        return "librito_%s" %(i)
 
-
+#print(librito_1)
 establecer_n_libritos()
 def procesar():
     print(input_path)

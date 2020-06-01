@@ -1,9 +1,11 @@
 import webbrowser
+
+import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog, Entry, Checkbutton, Radiobutton
 import tkinter.filedialog as filedialog
-import tkinter as tk
+
 from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
 import math
 import numpy as np
@@ -68,6 +70,7 @@ def print_selection():
 
 
 def establecer_n_libritos():
+    global conjunto_libros
     #with open(input_path, 'rb') as f:
         #pdf = PdfFileReader(f)
         #numero_pg = pdf.getNumPages()
@@ -76,16 +79,24 @@ def establecer_n_libritos():
     numero_libritos = int(numero_pg/20)
     print(numero_libritos)
     pagina = 0
+    conjunto_libros = {}
     for i in range(1, numero_libritos+1):
+        print(i)
         libro = "librito_%s" %(i)
         print(libro)
-        librito = range(pagina+1, pagina+20)
-        print(librito)
+        dict={libro:(pagina+1,pagina+20)}
+        conjunto_libros.update(dict)
+        print(conjunto_libros)
+
         pagina= pagina + 20
-        return "librito_%s" %(i)
+    return conjunto_libros
+
 
 #print(librito_1)
 establecer_n_libritos()
+
+print("HEY")
+print(conjunto_libros)
 def procesar():
     print(input_path)
 

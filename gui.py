@@ -91,6 +91,7 @@ def establecer_n_libritos():
         pagina= pagina + 20
     return conjunto_libros
 
+def dividir_libro:
 
 #print(librito_1)
 establecer_n_libritos()

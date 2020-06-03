@@ -12,12 +12,20 @@ import numpy as np
 import webbrowser as wb
 from os import remove
 import os
+from docx import Document
+
+
 # Creación de la ventana
 window = Tk()
 window.title("PDF to A5 Printable Book") # Nombre de la ventana
 
 window.filename = None
 
+# Creo documento .doc para convertirlo en el pdf_blanco.pdf posteriormente.
+
+
+document = Document()
+document.save('test.docx')
 
 # Funciones
 def clicked():
@@ -91,8 +99,8 @@ def establecer_n_libritos():
         pagina= pagina + 20
     return conjunto_libros
 
-def dividir_libro:
-
+def dividir_libro():
+    print("Hola")
 #print(librito_1)
 establecer_n_libritos()
 

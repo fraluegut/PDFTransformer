@@ -54,6 +54,7 @@ def input():
     numero_folios_reales = math.ceil(numero_pg / 4)
     print(input_entry)
     print(input_path)
+    establecer_n_libritos()
     return numero_folios_reales, input_path
 
 def output():
@@ -79,33 +80,30 @@ def print_selection():
 
 def establecer_n_libritos():
     global conjunto_libros
-    #with open(input_path, 'rb') as f:
-        #pdf = PdfFileReader(f)
-        #numero_pg = pdf.getNumPages()
-    numero_pg = 100
-    print(numero_pg)
+    with open(input_path, 'rb') as f:
+        pdf = PdfFileReader(f)
+        numero_pg = pdf.getNumPages()
     numero_libritos = int(numero_pg/20)
-    print(numero_libritos)
+    print("Dado el número de páginas: " + str(numero_pg) + ", el número de libritos seria " + str(numero_libritos))
     pagina = 0
     conjunto_libros = {}
     for i in range(1, numero_libritos+1):
-        print(i)
         libro = "librito_%s" %(i)
-        print(libro)
         dict={libro:(pagina+1,pagina+20)}
         conjunto_libros.update(dict)
-        print(conjunto_libros)
+
 
         pagina= pagina + 20
+    print("El conjunto de libros sería: ")
+    print(conjunto_libros)
     return conjunto_libros
 
 def dividir_libro():
     print("Hola")
 #print(librito_1)
-establecer_n_libritos()
 
-print("HEY")
-print(conjunto_libros)
+
+
 def procesar():
     print(input_path)
 
@@ -187,6 +185,7 @@ def procesar():
     directorio = path.replace("/", "//")
     print(directorio)
     webbrowser.open(directorio)
+
 ##################### Display ######################################
 
 

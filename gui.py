@@ -90,7 +90,7 @@ def establecer_n_libritos():
     with open(input_path, 'rb') as f:
         pdf = PdfFileReader(f)
         numero_pg = pdf.getNumPages()
-    numero_libritos = int(numero_pg/20)
+    numero_libritos = math.ceil(numero_pg/20)
     print("Dado el número de páginas: " + str(numero_pg) + ", el número de libritos seria " + str(numero_libritos))
     pagina = 0
     conjunto_libros = {}
@@ -109,7 +109,7 @@ def dividir_libro():
     print("Hola")
 
 def procesar():
-    global libro_final
+    global libro_final, librito
     print(input_path)
 
     split(str(input_path), str(nombre_salida_entry.get())+"_")
@@ -200,23 +200,21 @@ def procesar():
                 remove("%s/%s" % (path, pdf))
             except:
                 continue
-        # Juntamos muy junticos los pdfs resultantes y le damos el nombre que indicó el usuario en nombre_salida_entry a través de un get().
-        # libro_final = PdfFileMerger()
-        # libro_final.append(Cara_A)
-        # libro_final.append(Cara_B)
-        # print("Libro final: ")
-        # print(libro_final)
-        # return libro_final
-        print("Libritos separados impresos")
 
+        print("Libritos separados impresos")
+    libro_final = PdfFileMerger()
     for librito in conjunto_libros.items():
-        libro_final = PdfFileMerger()
         libro_final.append(nombre_salida_entry.get() + "_A_" + str(librito[0]))
         libro_final.append(nombre_salida_entry.get() + "_B_" + str(librito[0]))
-        return libro_final
+
 
     libro_final.write(nombre_salida_entry.get() + "_Final")
     libro_final.close()
+    for librito in conjunto_libros.items():
+        remove("%s/%s" % (path, nombre_salida_entry.get() + "_A_" + str(librito[0])))
+        remove("%s/%s" % (path, nombre_salida_entry.get() + "_B_" + str(librito[0])))
+        print("Libros eliminados")
+
     url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get() + "_Final"
     # Abre el documento resultante
     wb.open_new(url_salida)

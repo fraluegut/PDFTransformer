@@ -13,6 +13,7 @@ import webbrowser as wb
 from os import remove
 import os
 from docx import Document
+import statistics
 
 
 # Creación de la ventana
@@ -54,7 +55,11 @@ def input():
     numero_folios_reales = math.ceil(numero_pg / 4)
     print(input_entry)
     print(input_path)
-    establecer_n_libritos()
+
+    if math.ceil(numero_pg/20) > 1:
+        l.config(text='Se crearán  ' + str(math.ceil(numero_pg / 20)) + " libritos.")
+    else:
+        l.config(text='Se creará un librito.')
     return numero_folios_reales, input_path
 
 def output():
@@ -100,7 +105,7 @@ def establecer_n_libritos():
 
 def dividir_libro():
     print("Hola")
-#print(librito_1)
+
 
 
 
@@ -115,12 +120,21 @@ def procesar():
         numero_folios_reales = math.ceil(numero_pg / 4)
         matrix = np.arange(numero_folios_reales * 4).reshape((numero_folios_reales, 4))
         print(matrix)
-        matrix[numero_folios_reales - 1, 2] = (numero_folios_reales * 4) / 2
+
+        total_paginas=(paginas[0]-1, paginas[1])
+        matrix[numero_folios_reales - 1, 2] = statistics.mean(total_paginas) #(numero_folios_reales * 4) / 2
         matrix[numero_folios_reales - 1, 1] = matrix[numero_folios_reales - 1, 2] - 1
         matrix[numero_folios_reales - 1, 3] = matrix[numero_folios_reales - 1, 2] + 1
         matrix[numero_folios_reales - 1, 0] = matrix[numero_folios_reales - 1, 3] + 1
 
         # TODO Aquí está la miga.
+        # for i in range(int(numero_folios_reales) - 2, -1, -1):
+        #     print(i)
+        #     matrix[i, 0] = matrix[i + 1, 0] + 2
+        #     matrix[i, 1] = matrix[i + 1, 1] - 2
+        #     matrix[i, 2] = matrix[i + 1, 2] - 2
+        #     matrix[i, 3] = matrix[i + 1, 3] + 2
+
         for i in range(int(numero_folios_reales) - 2, -1, -1):
             print(i)
             matrix[i, 0] = matrix[i + 1, 0] + 2
@@ -170,7 +184,7 @@ def procesar():
             except FileNotFoundError:
                 merger.append("pdf_blanco.pdf")
         # Juntamos muy junticos los pdfs resultantes y le damos el nombre que indicó el usuario en nombre_salida_entry a través de un get().
-        merger.write(nombre_salida_entry.get())
+        merger.write(nombre_salida_entry.get()+ "_" + str(librito))
         merger.close()
         url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get()
         # Abre el documento resultante
@@ -230,16 +244,18 @@ nombre_salida.pack(pady=5)
 nombre_salida_entry = tk.Entry(frame_base, text="", width=40)
 nombre_salida_entry.pack(pady=5)
 
-# RadioButton Impresora doble cara/Impresora una cara
-var = tk.StringVar()
-r1 = tk.Radiobutton(frame_base, text='Impresora doble cara', variable=var, value='impresora doble cara', command=print_selection)
-r1.pack()
-r2 = tk.Radiobutton(frame_base, text='Impresora una cara', variable=var, value='impresora una cara', command=print_selection)
-r2.pack()
+# # RadioButton Impresora doble cara/Impresora una cara
+# var = tk.StringVar()
+# r1 = tk.Radiobutton(frame_base, text='Impresora doble cara', variable=var, value='impresora doble cara', command=print_selection)
+# r1.pack()
+# r2 = tk.Radiobutton(frame_base, text='Impresora una cara', variable=var, value='impresora una cara', command=print_selection)
+# r2.pack()
 
-# Hueco para la impresora elegida
-l = tk.Label(frame_base, bg='white', width=200, text='')
-l.pack(pady=5)
+# # Hueco para la impresora elegida
+# l = tk.Label(frame_base, bg='white', width=200, text='')
+# l.pack(pady=5)
+
+
 
 # Botón Procesar
 browse3 = tk.Button(frame_base, text="Procesar", command=procesar)
@@ -257,6 +273,9 @@ numero_paginas_result.pack(pady=5)
 numero_folios_result = tk.Label(frame_base, bg='white', width=200, text='Número de folios: ')
 numero_folios_result.pack(pady=5)
 
+# Hueco para texto
+l = tk.Label(frame_base, bg='white', width=200, text='')
+l.pack(pady=5)
 
 if window.filename is not None:
     a = window.filename

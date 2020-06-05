@@ -108,79 +108,83 @@ def procesar():
     print(input_path)
 
     split(str(input_path), str(nombre_salida_entry.get())+"_")
+    for librito, paginas in conjunto_libros.items():
+        print("Librito: " + str(librito) + ". Desde página: " + str(paginas[0]) + ", hasta página " + str(paginas[1]))
+        # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
+        numero_pg = paginas[1]+1-paginas[0]
+        numero_folios_reales = math.ceil(numero_pg / 4)
+        matrix = np.arange(numero_folios_reales * 4).reshape((numero_folios_reales, 4))
+        print(matrix)
+        matrix[numero_folios_reales - 1, 2] = (numero_folios_reales * 4) / 2
+        matrix[numero_folios_reales - 1, 1] = matrix[numero_folios_reales - 1, 2] - 1
+        matrix[numero_folios_reales - 1, 3] = matrix[numero_folios_reales - 1, 2] + 1
+        matrix[numero_folios_reales - 1, 0] = matrix[numero_folios_reales - 1, 3] + 1
 
-    # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
-    matrix = np.arange(numero_folios_reales * 4).reshape((numero_folios_reales, 4))
+        # TODO Aquí está la miga.
+        for i in range(int(numero_folios_reales) - 2, -1, -1):
+            print(i)
+            matrix[i, 0] = matrix[i + 1, 0] + 2
+            matrix[i, 1] = matrix[i + 1, 1] - 2
+            matrix[i, 2] = matrix[i + 1, 2] - 2
+            matrix[i, 3] = matrix[i + 1, 3] + 2
+        print(matrix)
+        Pdfs_cara_A = []
 
-    matrix[numero_folios_reales - 1, 2] = (numero_folios_reales * 4) / 2
-    matrix[numero_folios_reales - 1, 1] = matrix[numero_folios_reales - 1, 2] - 1
-    matrix[numero_folios_reales - 1, 3] = matrix[numero_folios_reales - 1, 2] + 1
-    matrix[numero_folios_reales - 1, 0] = matrix[numero_folios_reales - 1, 3] + 1
+        for i in range(0, numero_folios_reales):
 
-    for i in range(int(numero_folios_reales) - 2, -1, -1):
-        # print(i)
-        matrix[i, 0] = matrix[i + 1, 0] + 2
-        matrix[i, 1] = matrix[i + 1, 1] - 2
-        matrix[i, 2] = matrix[i + 1, 2] - 2
-        matrix[i, 3] = matrix[i + 1, 3] + 2
+            if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1))) != None:
+                Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1)))
+            else:
+                Pdfs_cara_A.append("pdf_blanco.pdf")
 
-    Pdfs_cara_A = []
+            if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1))) != None:
+                Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1)))
+            else:
+                Pdfs_cara_A.append("pdf_blanco.pdf")
 
-    for i in range(0, numero_folios_reales):
+        Pdfs_cara_B = []
 
-        if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1))) != None:
-            Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1)))
-        else:
-            Pdfs_cara_A.append("pdf_blanco.pdf")
+        for i in range(0, numero_folios_reales):
 
-        if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1))) != None:
-            Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1)))
-        else:
-            Pdfs_cara_A.append("pdf_blanco.pdf")
+            if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1))) != None:
+                Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1)))
+            else:
+                Pdfs_cara_B.append("pdf_blanco.pdf")
 
-    Pdfs_cara_B = []
-
-    for i in range(0, numero_folios_reales):
-
-        if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1))) != None:
-            Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1)))
-        else:
-            Pdfs_cara_B.append("pdf_blanco.pdf")
-
-        if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1))) != None:
-            Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1)))
-        else:
-            Pdfs_cara_B.append("pdf_blanco.pdf")
+            if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1))) != None:
+                Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1)))
+            else:
+                Pdfs_cara_B.append("pdf_blanco.pdf")
 
 
-    merger = PdfFileMerger()
+        merger = PdfFileMerger()
 
-    for pdf in Pdfs_cara_A:
-        try:
-            merger.append(pdf)
-        except FileNotFoundError:
-            merger.append("pdf_blanco.pdf")
-    for pdf in Pdfs_cara_B:
-        try:
-            merger.append(pdf)
-        except FileNotFoundError:
-            merger.append("pdf_blanco.pdf")
-    # Juntamos muy junticos los pdfs resultantes y le damos el nombre que indicó el usuario en nombre_salida_entry a través de un get().
-    merger.write(nombre_salida_entry.get())
-    merger.close()
-    url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get()
-    # Abre el documento resultante
-    wb.open_new(url_salida)
-    for pdf in Pdfs_cara_A:
-        try:
-            remove("%s/%s" % (path, pdf))
-        except:
-            continue
-    for pdf in Pdfs_cara_B:
-        try:
-            remove("%s/%s" % (path, pdf))
-        except:
-            continue
+        for pdf in Pdfs_cara_A:
+            try:
+                merger.append(pdf)
+            except FileNotFoundError:
+                merger.append("pdf_blanco.pdf")
+        for pdf in Pdfs_cara_B:
+            try:
+                merger.append(pdf)
+            except FileNotFoundError:
+                merger.append("pdf_blanco.pdf")
+        # Juntamos muy junticos los pdfs resultantes y le damos el nombre que indicó el usuario en nombre_salida_entry a través de un get().
+        merger.write(nombre_salida_entry.get())
+        merger.close()
+        url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get()
+        # Abre el documento resultante
+        wb.open_new(url_salida)
+        for pdf in Pdfs_cara_A:
+            try:
+                remove("%s/%s" % (path, pdf))
+            except:
+                continue
+        for pdf in Pdfs_cara_B:
+            try:
+                remove("%s/%s" % (path, pdf))
+            except:
+                continue
     #os.system(f'start {os.path.realpath(url_salida)}')
     directorio = path.replace("/", "//")
     print(directorio)

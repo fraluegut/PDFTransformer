@@ -6,6 +6,7 @@ from tkinter import messagebox
 from tkinter import filedialog, Entry, Checkbutton, Radiobutton
 import tkinter.filedialog as filedialog
 
+
 from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
 import math
 import numpy as np
@@ -23,7 +24,6 @@ window.title("PDF to A5 Printable Book") # Nombre de la ventana
 window.filename = None
 
 # Creo documento .doc para convertirlo en el pdf_blanco.pdf posteriormente.
-
 
 document = Document()
 document.save('test.docx')
@@ -60,6 +60,7 @@ def input():
         l.config(text='Se crearán  ' + str(math.ceil(numero_pg / 20)) + " libritos.")
     else:
         l.config(text='Se creará un librito.')
+    establecer_n_libritos()
     return numero_folios_reales, input_path
 
 def output():
@@ -79,12 +80,13 @@ def split(path, name_of_split):
         with open(output, 'wb') as output_pdf:
             pdf_writer.write(output_pdf)
 
-def print_selection():
-    l.config(text='Ha seleccionado  ' + var.get())
+# def print_selection():
+#     l.config(text='Ha seleccionado  ' + var.get())
 
 
 def establecer_n_libritos():
     global conjunto_libros
+    # input_path = tk.filedialog.askopenfilename()
     with open(input_path, 'rb') as f:
         pdf = PdfFileReader(f)
         numero_pg = pdf.getNumPages()
@@ -106,19 +108,19 @@ def establecer_n_libritos():
 def dividir_libro():
     print("Hola")
 
-
-
-
 def procesar():
+    global libro_final
     print(input_path)
 
     split(str(input_path), str(nombre_salida_entry.get())+"_")
     for librito, paginas in conjunto_libros.items():
+
         print("Librito: " + str(librito) + ". Desde página: " + str(paginas[0]) + ", hasta página " + str(paginas[1]))
         # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
         numero_pg = paginas[1]+1-paginas[0]
         numero_folios_reales = math.ceil(numero_pg / 4)
         matrix = np.arange(numero_folios_reales * 4).reshape((numero_folios_reales, 4))
+        print("Matrix antigua")
         print(matrix)
 
         total_paginas=(paginas[0]-1, paginas[1])
@@ -136,11 +138,13 @@ def procesar():
         #     matrix[i, 3] = matrix[i + 1, 3] + 2
 
         for i in range(int(numero_folios_reales) - 2, -1, -1):
+            print("ID: ")
             print(i)
             matrix[i, 0] = matrix[i + 1, 0] + 2
             matrix[i, 1] = matrix[i + 1, 1] - 2
             matrix[i, 2] = matrix[i + 1, 2] - 2
             matrix[i, 3] = matrix[i + 1, 3] + 2
+        print("Matrix: ")
         print(matrix)
         Pdfs_cara_A = []
 
@@ -171,38 +175,57 @@ def procesar():
                 Pdfs_cara_B.append("pdf_blanco.pdf")
 
 
-        merger = PdfFileMerger()
+        Cara_A = PdfFileMerger()
 
+        Cara_B = PdfFileMerger()
         for pdf in Pdfs_cara_A:
             try:
-                merger.append(pdf)
+                Cara_A.append(pdf)
             except FileNotFoundError:
-                merger.append("pdf_blanco.pdf")
+                Cara_A.append("pdf_blanco.pdf")
+        Cara_A.write(nombre_salida_entry.get() + "_A_"+str(librito))
         for pdf in Pdfs_cara_B:
             try:
-                merger.append(pdf)
+                Cara_B.append(pdf)
             except FileNotFoundError:
-                merger.append("pdf_blanco.pdf")
+                Cara_B.append("pdf_blanco.pdf")
+        Cara_B.write(nombre_salida_entry.get()+"_B_"+ str(librito))
+        for pdf in Pdfs_cara_A:
+            try:
+                remove("%s/%s" % (path, pdf))
+            except:
+                continue
+        for pdf in Pdfs_cara_B:
+            try:
+                remove("%s/%s" % (path, pdf))
+            except:
+                continue
         # Juntamos muy junticos los pdfs resultantes y le damos el nombre que indicó el usuario en nombre_salida_entry a través de un get().
-        merger.write(nombre_salida_entry.get()+ "_" + str(librito))
-        merger.close()
-        url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get()
-        # Abre el documento resultante
-        wb.open_new(url_salida)
-        for pdf in Pdfs_cara_A:
-            try:
-                remove("%s/%s" % (path, pdf))
-            except:
-                continue
-        for pdf in Pdfs_cara_B:
-            try:
-                remove("%s/%s" % (path, pdf))
-            except:
-                continue
+        # libro_final = PdfFileMerger()
+        # libro_final.append(Cara_A)
+        # libro_final.append(Cara_B)
+        # print("Libro final: ")
+        # print(libro_final)
+        # return libro_final
+        print("Libritos separados impresos")
+
+    for librito in conjunto_libros.items():
+        libro_final = PdfFileMerger()
+        libro_final.append(nombre_salida_entry.get() + "_A_" + str(librito[0]))
+        libro_final.append(nombre_salida_entry.get() + "_B_" + str(librito[0]))
+        return libro_final
+
+    libro_final.write(nombre_salida_entry.get() + "_Final")
+    libro_final.close()
+    url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get() + "_Final"
+    # Abre el documento resultante
+    wb.open_new(url_salida)
+
     #os.system(f'start {os.path.realpath(url_salida)}')
     directorio = path.replace("/", "//")
     print(directorio)
-    webbrowser.open(directorio)
+    print("Todo salió bien")
+    #webbrowser.open(directorio)
 
 ##################### Display ######################################
 

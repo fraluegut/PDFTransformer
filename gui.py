@@ -205,6 +205,7 @@ def procesar():
     libro_final = PdfFileMerger()
     for librito in conjunto_libros.items():
         libro_final.append(nombre_salida_entry.get() + "_A_" + str(librito[0]))
+    for librito in conjunto_libros.items():
         libro_final.append(nombre_salida_entry.get() + "_B_" + str(librito[0]))
 
 

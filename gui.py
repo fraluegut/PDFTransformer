@@ -1,34 +1,38 @@
-import webbrowser
+# Aplicación para Convertir un pdf cualquiera en un pdf con las páginas ordenadas de tal manera
+# que se puedan imprimir a doble cara, con dos páginas por hoja y se creen libritos pequeños que cosidos conformen un libro a encuadernar.
 
+
+##################### Librerías de la aplicación ######################################
+import webbrowser
 import tkinter as tk
 from tkinter import *
-from tkinter import messagebox
-from tkinter import filedialog, Entry, Checkbutton, Radiobutton
+from tkinter import filedialog
 import tkinter.filedialog as filedialog
-
-
-from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
+import statistics
 import math
 import numpy as np
 import webbrowser as wb
 from os import remove
-import os
 from docx import Document
-import statistics
+from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
 
 
-# Creación de la ventana
+# Creación de la ventana en Tkinter.
 window = Tk()
 window.title("PDF to A5 Printable Book") # Nombre de la ventana
 
 window.filename = None
 
 # Creo documento .doc para convertirlo en el pdf_blanco.pdf posteriormente.
-
+# Este pdf_blanco.pdf servirá para rellenar las ubicaciones de páginas cuando sea preciso favoreciendo la paginación.
 document = Document()
 document.save('test.docx')
 
-# Funciones
+
+##################### Funciones de la aplicación ######################################
+# Funciones necesarias para el correcto funcionamiento de la aplicación:
+
+# Función para seleccionar el pdf que se quiere procesar.
 def clicked():
     window.filename = filedialog.askopenfilename(initialdir="/home/fraluegut/Descargas", title="Select file", filetypes=(("all files", "*.*"), ("jpeg files", "*.jpg")))
 
@@ -41,6 +45,7 @@ def clicked():
 
     return window.filename, numero_pg
 
+# Función para seleccionar el pdf que se quiere procesar.
 def input():
     global numero_folios_reales
     global input_path
@@ -63,6 +68,7 @@ def input():
     establecer_n_libritos()
     return numero_folios_reales, input_path
 
+# Función para determinar la ubicación de salida del pdf final y de los intermedios.
 def output():
     global path
     path = filedialog.askdirectory()
@@ -70,6 +76,7 @@ def output():
     output_entry.insert(0, str(path))  # Insert the 'path'
     return path
 
+# Función para dividir en pdf independientes todas las páginas del pdf introducido.
 def split(path, name_of_split):
     pdf = PdfFileReader(path)
     for page in range(pdf.getNumPages()):
@@ -80,10 +87,11 @@ def split(path, name_of_split):
         with open(output, 'wb') as output_pdf:
             pdf_writer.write(output_pdf)
 
-# def print_selection():
-#     l.config(text='Ha seleccionado  ' + var.get())
+# Función para determinar la elección de tipo de impresión (1 Cara/Doble Cara).
+def print_selection():
+     l.config(text='Ha seleccionado  ') # + var.get())
 
-
+# Función para determinar el número de libritos que se necesitan teniendo en cuenta el nº de páginas del pdf.
 def establecer_n_libritos():
     global conjunto_libros
     # input_path = tk.filedialog.askopenfilename()
@@ -105,9 +113,8 @@ def establecer_n_libritos():
     print(conjunto_libros)
     return conjunto_libros
 
-def dividir_libro():
-    print("Hola")
-
+# Esta función es la encargada de realizar el proceso fundamental. Se divide en los siguientes pasos:
+# 1.
 def procesar():
     global libro_final, librito
     print(input_path)
@@ -226,9 +233,9 @@ def procesar():
     print("Todo salió bien")
     #webbrowser.open(directorio)
 
-##################### Display ######################################
 
 
+##################### Display de la aplicación ######################################
 
 # Frame
 frame_base = tk.Frame(window)

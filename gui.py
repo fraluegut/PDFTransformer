@@ -236,7 +236,6 @@ def procesar():
 
 
 ##################### Display de la aplicación ######################################
-
 # Frame
 frame_base = tk.Frame(window)
 frame_base.pack(side=tk.TOP)

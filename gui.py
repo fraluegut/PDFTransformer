@@ -89,7 +89,7 @@ def split(path, name_of_split):
 
 # Función para determinar la elección de tipo de impresión (1 Cara/Doble Cara).
 def print_selection():
-     l.config(text='Ha seleccionado  ') # + var.get())
+     impresora_escogida.config(text='Ha seleccionado ' + var.get())
 
 # Función para determinar el número de libritos que se necesitan teniendo en cuenta el nº de páginas del pdf.
 def establecer_n_libritos():
@@ -272,16 +272,16 @@ nombre_salida.pack(pady=5)
 nombre_salida_entry = tk.Entry(frame_base, text="", width=40)
 nombre_salida_entry.pack(pady=5)
 
-# # RadioButton Impresora doble cara/Impresora una cara
-# var = tk.StringVar()
-# r1 = tk.Radiobutton(frame_base, text='Impresora doble cara', variable=var, value='impresora doble cara', command=print_selection)
-# r1.pack()
-# r2 = tk.Radiobutton(frame_base, text='Impresora una cara', variable=var, value='impresora una cara', command=print_selection)
-# r2.pack()
+# RadioButton Impresora doble cara/Impresora una cara
+var = tk.StringVar()
+r1 = tk.Radiobutton(frame_base, text='Impresora doble cara', variable=var, value='impresora doble cara', command=print_selection)
+r1.pack()
+r2 = tk.Radiobutton(frame_base, text='Impresora una cara', variable=var, value='impresora una cara', command=print_selection)
+r2.pack()
 
-# # Hueco para la impresora elegida
-# l = tk.Label(frame_base, bg='white', width=200, text='')
-# l.pack(pady=5)
+# Hueco para la impresora elegida
+impresora_escogida = tk.Label(frame_base, bg='white', width=200, text='')
+impresora_escogida.pack(pady=5)
 
 
 

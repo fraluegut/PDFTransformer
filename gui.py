@@ -89,7 +89,7 @@ def split(path, name_of_split):
 
 # Función para determinar la elección de tipo de impresión (1 Cara/Doble Cara).
 def print_selection():
-     impresora_escogida.config(text='Ha seleccionado ' + var.get())
+     impresora_escogida.config(text='Ha seleccionado ' + tipo_impresion.get())
 
 # Función para determinar el número de libritos que se necesitan teniendo en cuenta el nº de páginas del pdf.
 def establecer_n_libritos():
@@ -114,125 +114,137 @@ def establecer_n_libritos():
     return conjunto_libros
 
 # Esta función es la encargada de realizar el proceso fundamental. Se divide en los siguientes pasos:
-# 1.
+# 1. Se divide el pdf en tantos pdf individuales como páginas tenga el pdf.
+# 2. Se establece el número de libritos y se dividen todas las páginas del pdf en esos libritos.
+# 3. Se crea una matriz base para cada librito.
+# 4. Se modifica la matriz inicial sustituyendo los valores iniciales por los definitivos dentro de la distribución de cada librito.
+
 def procesar():
-    global libro_final, librito
+    global libro_final, librito, tipo_impresion
     print(input_path)
-
+    # 1. Se divide el pdf en tantos pdf individuales como páginas tenga el pdf.
     split(str(input_path), str(nombre_salida_entry.get())+"_")
-    for librito, paginas in conjunto_libros.items():
+    if tipo_impresion.get() == 'impresora una cara':
 
-        print("Librito: " + str(librito) + ". Desde página: " + str(paginas[0]) + ", hasta página " + str(paginas[1]))
-        # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
-        numero_pg = paginas[1]+1-paginas[0]
-        numero_folios_reales = math.ceil(numero_pg / 4)
-        matrix = np.arange(numero_folios_reales * 4).reshape((numero_folios_reales, 4))
-        print("Matrix antigua")
-        print(matrix)
+        # 2. Se establece el número de libritos y se dividen todas las páginas del pdf en esos libritos.
+        for librito, paginas in conjunto_libros.items():
 
-        total_paginas=(paginas[0]-1, paginas[1])
-        matrix[numero_folios_reales - 1, 2] = statistics.mean(total_paginas) #(numero_folios_reales * 4) / 2
-        matrix[numero_folios_reales - 1, 1] = matrix[numero_folios_reales - 1, 2] - 1
-        matrix[numero_folios_reales - 1, 3] = matrix[numero_folios_reales - 1, 2] + 1
-        matrix[numero_folios_reales - 1, 0] = matrix[numero_folios_reales - 1, 3] + 1
+            print("Librito: " + str(librito) + ". Desde página: " + str(paginas[0]) + ", hasta página " + str(paginas[1]))
+            # Matrix con num min de carillas que es el mínimo común múltiplo del número de páginas
+            numero_pg = paginas[1]+1-paginas[0]
+            numero_folios_reales = math.ceil(numero_pg / 4)
+            # 3. Se crea una matriz base para cada librito.
+            matrix = np.arange(numero_folios_reales * 4).reshape((numero_folios_reales, 4))
+            print("Matrix antigua")
+            print(matrix)
 
-        # TODO Aquí está la miga.
-        # for i in range(int(numero_folios_reales) - 2, -1, -1):
-        #     print(i)
-        #     matrix[i, 0] = matrix[i + 1, 0] + 2
-        #     matrix[i, 1] = matrix[i + 1, 1] - 2
-        #     matrix[i, 2] = matrix[i + 1, 2] - 2
-        #     matrix[i, 3] = matrix[i + 1, 3] + 2
-
-        for i in range(int(numero_folios_reales) - 2, -1, -1):
-            print("ID: ")
-            print(i)
-            matrix[i, 0] = matrix[i + 1, 0] + 2
-            matrix[i, 1] = matrix[i + 1, 1] - 2
-            matrix[i, 2] = matrix[i + 1, 2] - 2
-            matrix[i, 3] = matrix[i + 1, 3] + 2
-        print("Matrix: ")
-        print(matrix)
-        Pdfs_cara_A = []
-
-        for i in range(0, numero_folios_reales):
-
-            if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1))) != None:
-                Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1)))
-            else:
-                Pdfs_cara_A.append("pdf_blanco.pdf")
-
-            if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1))) != None:
-                Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1)))
-            else:
-                Pdfs_cara_A.append("pdf_blanco.pdf")
-
-        Pdfs_cara_B = []
-
-        for i in range(0, numero_folios_reales):
-
-            if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1))) != None:
-                Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1)))
-            else:
-                Pdfs_cara_B.append("pdf_blanco.pdf")
-
-            if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1))) != None:
-                Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1)))
-            else:
-                Pdfs_cara_B.append("pdf_blanco.pdf")
+            total_paginas=(paginas[0]-1, paginas[1])
+            matrix[numero_folios_reales - 1, 2] = statistics.mean(total_paginas) #(numero_folios_reales * 4) / 2
+            matrix[numero_folios_reales - 1, 1] = matrix[numero_folios_reales - 1, 2] - 1
+            matrix[numero_folios_reales - 1, 3] = matrix[numero_folios_reales - 1, 2] + 1
+            matrix[numero_folios_reales - 1, 0] = matrix[numero_folios_reales - 1, 3] + 1
 
 
-        Cara_A = PdfFileMerger()
+            # for i in range(int(numero_folios_reales) - 2, -1, -1):
+            #     print(i)
+            #     matrix[i, 0] = matrix[i + 1, 0] + 2
+            #     matrix[i, 1] = matrix[i + 1, 1] - 2
+            #     matrix[i, 2] = matrix[i + 1, 2] - 2
+            #     matrix[i, 3] = matrix[i + 1, 3] + 2
 
-        Cara_B = PdfFileMerger()
-        for pdf in Pdfs_cara_A:
-            try:
-                Cara_A.append(pdf)
-            except FileNotFoundError:
-                Cara_A.append("pdf_blanco.pdf")
-        Cara_A.write(nombre_salida_entry.get() + "_A_"+str(librito))
-        for pdf in Pdfs_cara_B:
-            try:
-                Cara_B.append(pdf)
-            except FileNotFoundError:
-                Cara_B.append("pdf_blanco.pdf")
-        Cara_B.write(nombre_salida_entry.get()+"_B_"+ str(librito))
-        for pdf in Pdfs_cara_A:
-            try:
-                remove("%s/%s" % (path, pdf))
-            except:
-                continue
-        for pdf in Pdfs_cara_B:
-            try:
-                remove("%s/%s" % (path, pdf))
-            except:
-                continue
+            # 4. Se modifica la matriz inicial sustituyendo los valores iniciales por los definitivos dentro de la distribución de cada librito.
+            for i in range(int(numero_folios_reales) - 2, -1, -1):
+                print("ID: ")
+                print(i)
+                matrix[i, 0] = matrix[i + 1, 0] + 2
+                matrix[i, 1] = matrix[i + 1, 1] - 2
+                matrix[i, 2] = matrix[i + 1, 2] - 2
+                matrix[i, 3] = matrix[i + 1, 3] + 2
+            print("Matrix: ")
+            print(matrix)
 
-        print("Libritos separados impresos")
-    libro_final = PdfFileMerger()
-    for librito in conjunto_libros.items():
-        libro_final.append(nombre_salida_entry.get() + "_A_" + str(librito[0]))
-    for librito in conjunto_libros.items():
-        libro_final.append(nombre_salida_entry.get() + "_B_" + str(librito[0]))
+            Pdfs_cara_A = []
+
+            for i in range(0, numero_folios_reales):
+
+                if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1))) != None:
+                    Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 0] - 1)))
+                else:
+                    Pdfs_cara_A.append("pdf_blanco.pdf")
+
+                if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1))) != None:
+                    Pdfs_cara_A.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 1] - 1)))
+                else:
+                    Pdfs_cara_A.append("pdf_blanco.pdf")
+
+            Pdfs_cara_B = []
+
+            for i in range(0, numero_folios_reales):
+
+                if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1))) != None:
+                    Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 2] - 1)))
+                else:
+                    Pdfs_cara_B.append("pdf_blanco.pdf")
+
+                if ("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1))) != None:
+                    Pdfs_cara_B.append("%s_%s.pdf" % (str(nombre_salida_entry.get()), (matrix[i, 3] - 1)))
+                else:
+                    Pdfs_cara_B.append("pdf_blanco.pdf")
 
 
-    libro_final.write(nombre_salida_entry.get() + "_Final")
-    libro_final.close()
-    for librito in conjunto_libros.items():
-        remove("%s/%s" % (path, nombre_salida_entry.get() + "_A_" + str(librito[0])))
-        remove("%s/%s" % (path, nombre_salida_entry.get() + "_B_" + str(librito[0])))
-        print("Libros eliminados")
+            Cara_A = PdfFileMerger()
 
-    url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get() + "_Final"
-    # Abre el documento resultante
-    wb.open_new(url_salida)
+            Cara_B = PdfFileMerger()
+            for pdf in Pdfs_cara_A:
+                try:
+                    Cara_A.append(pdf)
+                except FileNotFoundError:
+                    Cara_A.append("pdf_blanco.pdf")
+            Cara_A.write(nombre_salida_entry.get() + "_A_"+str(librito))
+            for pdf in Pdfs_cara_B:
+                try:
+                    Cara_B.append(pdf)
+                except FileNotFoundError:
+                    Cara_B.append("pdf_blanco.pdf")
+            Cara_B.write(nombre_salida_entry.get()+"_B_"+ str(librito))
+            for pdf in Pdfs_cara_A:
+                try:
+                    remove("%s/%s" % (path, pdf))
+                except:
+                    continue
+            for pdf in Pdfs_cara_B:
+                try:
+                    remove("%s/%s" % (path, pdf))
+                except:
+                    continue
 
-    #os.system(f'start {os.path.realpath(url_salida)}')
-    directorio = path.replace("/", "//")
-    print(directorio)
-    print("Todo salió bien")
-    #webbrowser.open(directorio)
+            print("Libritos separados impresos")
+        libro_final = PdfFileMerger()
+        for librito in conjunto_libros.items():
+            libro_final.append(nombre_salida_entry.get() + "_A_" + str(librito[0]))
+        for librito in conjunto_libros.items():
+            libro_final.append(nombre_salida_entry.get() + "_B_" + str(librito[0]))
 
+
+        libro_final.write(nombre_salida_entry.get() + "_Final")
+        libro_final.close()
+        for librito in conjunto_libros.items():
+            remove("%s/%s" % (path, nombre_salida_entry.get() + "_A_" + str(librito[0])))
+            remove("%s/%s" % (path, nombre_salida_entry.get() + "_B_" + str(librito[0])))
+            print("Libros eliminados")
+
+        url_salida = str(output_entry.get()) + "/" + nombre_salida_entry.get() + "_Final"
+        # Abre el documento resultante
+        wb.open_new(url_salida)
+
+        #os.system(f'start {os.path.realpath(url_salida)}')
+        directorio = path.replace("/", "//")
+        print(directorio)
+        print("Todo salió bien")
+        #webbrowser.open(directorio)
+
+    elif tipo_impresion.get() == 'impresora doble cara':
+        print("Impresión a doble cara no configurado todavía.")
 
 
 ##################### Display de la aplicación ######################################
@@ -273,10 +285,10 @@ nombre_salida_entry = tk.Entry(frame_base, text="", width=40)
 nombre_salida_entry.pack(pady=5)
 
 # RadioButton Impresora doble cara/Impresora una cara
-var = tk.StringVar()
-r1 = tk.Radiobutton(frame_base, text='Impresora doble cara', variable=var, value='impresora doble cara', command=print_selection)
+tipo_impresion= tk.StringVar()
+r1 = tk.Radiobutton(frame_base, text='Impresora doble cara', variable=tipo_impresion, value='impresora doble cara', command=print_selection)
 r1.pack()
-r2 = tk.Radiobutton(frame_base, text='Impresora una cara', variable=var, value='impresora una cara', command=print_selection)
+r2 = tk.Radiobutton(frame_base, text='Impresora una cara', variable=tipo_impresion, value='impresora una cara', command=print_selection)
 r2.pack()
 
 # Hueco para la impresora elegida
